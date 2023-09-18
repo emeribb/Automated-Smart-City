@@ -1,5 +1,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include "light.cpp"
+#include "buttons.cpp"
 
 //LEDs Definition
 #define LED_1_GREEN 5
@@ -30,40 +32,22 @@ const String lights_topic = "esp32Chorizo/Lights";
 const String lights_subtopic = "/Light";
 const String buttons_topic = "esp32Chorizo/Buttons";
 const String buttons_subtopic = "/Button";
-const uint8_t leds[LEDS_AMOUNT] = {LED_1_GREEN, LED_1_RED, LED_2_GREEN, LED_2_RED, LED_3_GREEN, LED_3_RED, LED_4_GREEN, LED_4_RED};
-const uint8_t buttons[LEDS_AMOUNT/2] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4}
-
-uint8_t message_received[LEDS_AMOUNT/2];
-uint8_t lights[LEDS_AMOUNT/2];
-uint8_t buttons_values[LEDS_AMOUNT/2];
-uint8_t messages_amount = 0;
-uint8_t btn_sum, previous_btn_sum = 0;
+const uint8_t leds_pins[LEDS_AMOUNT] = {LED_1_GREEN, LED_1_RED, LED_2_GREEN, LED_2_RED, LED_3_GREEN, LED_3_RED, LED_4_GREEN, LED_4_RED};
+const uint8_t buttons_pins[LIGHTS_AMOUNT] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4}
 
 WiFiClient espClient;
 PubSubClient client(espClient);
+Lights lights(*leds_pins);
+Buttons buttons(*buttons_pins);
+
 void setup_wifi();
 void callback(char* topic, byte* message, unsigned int len);
 
 void setup() {
   Serial.begin(115200);
-  //Arrays initialization
-  for (uint8_t i = 0; i < LEDS_AMOUNT/2; i++) {
-    messaged_recieved[i] = 0;
-    lights[i] = 0;
-    buttons_vaules[i] = 0;
-  }
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-
-  // LED configuration
-  for (uint8_t i = 0; i < LEDS_AMOUNT; i++) {
-    pinMode(leds[i], OUTPUT);
-  }
-  // Button configuration
-  for (uint8_t i = 0; i < LEDS_AMOUNT/2; i++) {
-    pinMode(buttons[i], INPUT_PULLDOWN);
-  }
 }
 
 void loop(){
@@ -72,34 +56,7 @@ void loop(){
   }
   client.loop();
 
-  //Waits for all messages for be recieved
-  if (messages_amount == LEDS_AMOUNT/2) {
-    //Resets messages
-    for (uint8_t i = 0; i < LEDS_AMOUNT/2; i++) {
-      message_received[i] = 0;
-    }
-    //Outputs lights status
-    for (int i = 0; i < LEDS_AMOUNT; i+=2) {
-      Serial.println(lights[i/2]);
-      digitalWrite(leds[i], lights[i/2]);
-      digitalWrite(leds[i+1], !lights[i/2]);
-    }
-  }
-
-  btn_sum = 0;
-  for (uint8_t i = 0; i < LEDS_AMOUNT; i++) {
-    buttons_values[i] = digitalRead(buttons[i])
-    btn_sum += buttons_values[i];
-  }
-  
-  if (btn_sum != previous_btn_sum) {
-    for (uint8_t i = 0; i < LEDS_AMOUNT/2; i++) {
-      String topic_comparation_string = buttons_topic+buttons_subtopic+i;
-      if (buttons_values[i])
-        client.publish(topic_comparation_string, buttons_values[i]);
-    }
-  }
-  previous_btn_sum = btn_sum;
+  buttons.mqtt_read_and_send(*client, buttons_topic+buttons_subtopic);
 }
 
 //Connecting to WiFi network
@@ -144,13 +101,5 @@ void reconnect() {
 
 //Callback for MQTT received messages
 void callback(char* topic, byte* message, unsigned int len) {
-  messages_amount = 0;
-  for (uint8_t i = 0; i < LEDS_AMOUNT/2; i++) {
-    String topic_comparation_string = light_topic+light_subtopic+i;
-    if (strcmp(topic, topic_comparation_string) == 0) {
-      message_received[i] = 1;
-      lights[i] = (char)message[0] == '1';
-    }
-    messages_amount += message_received[i];
-  }
+  lights.update_lights_on_message(topic, (char)message[0] == '1');
 }
