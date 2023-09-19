@@ -1,0 +1,261 @@
+[
+    {
+        "id": "f09ea8621c1d8689",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0f255a1079e9a33f",
+        "type": "mqtt in",
+        "z": "f09ea8621c1d8689",
+        "name": "",
+        "topic": "esp32Chorizo/Sems/Sem0",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c843e967fbb186ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 480,
+        "wires": [
+            [
+                "e507496170ea6409"
+            ]
+        ]
+    },
+    {
+        "id": "6cc28e187dbada1d",
+        "type": "mqtt in",
+        "z": "f09ea8621c1d8689",
+        "name": "",
+        "topic": "esp32Chorizo/Sems/Sem2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c843e967fbb186ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 600,
+        "wires": [
+            [
+                "cb8f9b1eac75182f"
+            ]
+        ]
+    },
+    {
+        "id": "9216fc7a808d0e39",
+        "type": "mqtt in",
+        "z": "f09ea8621c1d8689",
+        "name": "",
+        "topic": "esp32Chorizo/Sems/Sem3",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c843e967fbb186ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 660,
+        "wires": [
+            [
+                "ee938721597d9ac1"
+            ]
+        ]
+    },
+    {
+        "id": "e507496170ea6409",
+        "type": "ui_led",
+        "z": "f09ea8621c1d8689",
+        "order": 1,
+        "group": "b9a555bdd73b770b",
+        "width": 0,
+        "height": 0,
+        "label": "led1",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "0",
+                "valueType": "num"
+            },
+            {
+                "color": "#008000",
+                "value": "1",
+                "valueType": "num"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 730,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "cb8f9b1eac75182f",
+        "type": "ui_led",
+        "z": "f09ea8621c1d8689",
+        "order": 3,
+        "group": "b9a555bdd73b770b",
+        "width": 0,
+        "height": 0,
+        "label": "led3",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "0",
+                "valueType": "num"
+            },
+            {
+                "color": "#008000",
+                "value": "1",
+                "valueType": "num"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 730,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ee938721597d9ac1",
+        "type": "ui_led",
+        "z": "f09ea8621c1d8689",
+        "order": 4,
+        "group": "b9a555bdd73b770b",
+        "width": 0,
+        "height": 0,
+        "label": "led4",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "0",
+                "valueType": "num"
+            },
+            {
+                "color": "#008000",
+                "value": "1",
+                "valueType": "num"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 730,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "7516ddff184f6c1d",
+        "type": "mqtt in",
+        "z": "f09ea8621c1d8689",
+        "name": "",
+        "topic": "esp32Chorizo/Sems/Sem1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "c843e967fbb186ee",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 370,
+        "y": 540,
+        "wires": [
+            [
+                "4915131e041e33e7"
+            ]
+        ]
+    },
+    {
+        "id": "4915131e041e33e7",
+        "type": "ui_led",
+        "z": "f09ea8621c1d8689",
+        "order": 2,
+        "group": "b9a555bdd73b770b",
+        "width": 0,
+        "height": 0,
+        "label": "led2",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "0",
+                "valueType": "num"
+            },
+            {
+                "color": "#008000",
+                "value": "1",
+                "valueType": "num"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 730,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "c843e967fbb186ee",
+        "type": "mqtt-broker",
+        "name": "ESPled1",
+        "broker": "192.168.1.9",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "b9a555bdd73b770b",
+        "type": "ui_group",
+        "name": "Group 1",
+        "tab": "2269bd92a0c3be97",
+        "order": 1,
+        "disp": true,
+        "width": 6
+    },
+    {
+        "id": "2269bd92a0c3be97",
+        "type": "ui_tab",
+        "name": "Tab 1",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
