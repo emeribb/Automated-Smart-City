@@ -1,7 +1,8 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include "light.cpp"
-#include "buttons.cpp"
+#include <string.h>
+#include "lights.h"
+#include "buttons.h"
 
 //LEDs Definition
 #define LED_1_GREEN 5
@@ -19,31 +20,31 @@
 #define BUTTON_3 13
 #define BUTTON_4 4
 
-//Global Constants
-#define LEDS_AMOUNT 8
-
 // Set the network SSID/Password
 const char* ssid = "steren_2_4G";
 const char* password = "password";
 
 // MQTT global variables
 const char* mqtt_server = "192.168.1.9";
-const String lights_topic = "esp32Chorizo/Lights";
-const String lights_subtopic = "/Light";
-const String buttons_topic = "esp32Chorizo/Buttons";
-const String buttons_subtopic = "/Button";
+const char* lights_topic = "esp32Chorizo/Lights";
+const char* lights_subtopic = "/Light";
+const char* buttons_topic = "esp32Chorizo/Buttons";
+const char* buttons_subtopic = "/Button";
+char* buttons_complete_topic;
 const uint8_t leds_pins[LEDS_AMOUNT] = {LED_1_GREEN, LED_1_RED, LED_2_GREEN, LED_2_RED, LED_3_GREEN, LED_3_RED, LED_4_GREEN, LED_4_RED};
-const uint8_t buttons_pins[LIGHTS_AMOUNT] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4}
+const uint8_t buttons_pins[BUTTONS_AMOUNT] = {BUTTON_1, BUTTON_2, BUTTON_3, BUTTON_4};
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-Lights lights(*leds_pins);
-Buttons buttons(*buttons_pins);
+Lights lights(leds_pins);
+Buttons buttons(buttons_pins);
 
 void setup_wifi();
 void callback(char* topic, byte* message, unsigned int len);
 
 void setup() {
+  strcat(buttons_complete_topic, buttons_topic);
+  strcat(buttons_complete_topic, buttons_subtopic);
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -55,8 +56,8 @@ void loop(){
     reconnect();
   }
   client.loop();
-
-  buttons.mqtt_read_and_send(*client, buttons_topic+buttons_subtopic);
+  
+  buttons.mqtt_read_and_send(&client, buttons_complete_topic);
 }
 
 //Connecting to WiFi network
