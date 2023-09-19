@@ -1,13 +1,12 @@
 from threading import Thread
 from resources.circuit import Lights, Buttons
 import paho.mqtt.client as mqtt
-import time
 
 # MQTT variables
 lights_topic = "esp32Chorizo/Lights"
 lights_subtopic = "/Light"
 buttons_topic = "esp32Chorizo/Buttons"
-broker_ip = "192.168.1.9"
+broker_ip = "192.168.1.27"
 
 # Global variables for logic convenience
 lights = Lights()
@@ -38,7 +37,7 @@ def produce_sequence() -> None:
     while True:
         if do_sequence:
             print(lights)
-            lights.publish_lights(lights_topic, lights_subtopic)
+            lights.publish_lights(lights_topic, lights_subtopic, client)
             lights.update_lights()
             lights.delay(light_time, do_sequence)
 
@@ -51,7 +50,7 @@ while True:
     if buttons.button_pressed(): # If any button is pressed, the sequence is interrupted and the lights are updated
         do_sequence = False
         lights.update_lights(buttons.get_buttons_state())
-        lights.publish_lights(lights_topic, lights_subtopic)
+        lights.publish_lights(lights_topic, lights_subtopic, client)
         idxs = lights.get_lights_off() # Gets the indexes of the lights that are off
         # Waits until the buttons of the lights that are off are turned on and then off again
         while buttons.wait_for_crossing(idxs):
